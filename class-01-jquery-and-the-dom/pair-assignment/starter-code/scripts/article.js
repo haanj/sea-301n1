@@ -4,10 +4,17 @@ function Article (opts) {
   // TODO: Use the js object passed in to complete this contructor function:
   // Save ALL the properties of `opts` into `this`.
   this.author = opts.author;
+  this.title = opts.title;
+  this.category = opts.category;
+  this.authorUrl = opts.authorUrl;
+  this.publishedOn = opts.publishedOn;
+  this.body = opts.body;
+
 }
 
 Article.prototype.toHtml = function() {
   var $newArticle = $('article.template').clone();
+
 
   $newArticle.data('category', this.category);
 
@@ -15,6 +22,12 @@ Article.prototype.toHtml = function() {
   // from this particular Article instance. We need to fill in:
   // the author name and url, the article title and body, and the
   // publication date.
+  $newArticle.data('author', this.author);
+  $newArticle.data('title', this.title);
+  $newArticle.data('authorUrl', this.authorUrl);
+  $newArticle.data('publishedOn', this.publishedOn);
+  $newArticle.data('body', this.body);
+
 
   // Include the publication date as a 'title' attribute to show on hover:
   $newArticle.find('time[pubdate]').attr('title', this.publishedOn)
@@ -24,7 +37,14 @@ Article.prototype.toHtml = function() {
 
   $newArticle.append('<hr>');
 
+  // Find each data blah blah
+  $newArticle.find('section.article-body').html(this.body);
+  $newArticle.find('h1').html(this.title);
+  $newArticle.find('a').html(this.author);
+  
+
   // TODO: This cloned article is no longer a template, so we should remove that class...
+  $newArticle.removeClass('template');
 
   return $newArticle;
 }
@@ -35,8 +55,8 @@ rawData.sort(function(a,b) {
 
 rawData.forEach(function(ele) {
   articles.push(new Article(ele));
-})
+});
 
 articles.forEach(function(a){
-  $('#articles').append(a.toHtml())
+  $('#articles').append(a.toHtml());
 });
