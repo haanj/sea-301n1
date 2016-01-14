@@ -16,7 +16,7 @@ Article.prototype.toHtml = function() {
   var $newArticle = $('article.template').clone();
 
 
-  $newArticle.data('category', this.category);
+  $newArticle.attr('data-category', this.category);
 
   // TODO: Use jQuery to fill in the template with properties
   // from this particular Article instance. We need to fill in:
@@ -41,7 +41,7 @@ Article.prototype.toHtml = function() {
   $newArticle.find('section.article-body').html(this.body);
   $newArticle.find('h1').html(this.title);
   $newArticle.find('a').html(this.author);
-  
+
 
   // TODO: This cloned article is no longer a template, so we should remove that class...
   $newArticle.removeClass('template');
