@@ -21,8 +21,8 @@
     };
     var appTemplate = $('#hello').html()
     var compiledTemplate = Handlebars.compile(appTemplate);
-    var html = compiledTemplate(data);
-    $('#app').append(html);
+    //var html = compiledTemplate(data);
+    $('#app').append(compiledTemplate(data));
   </script>
 
 </body>
