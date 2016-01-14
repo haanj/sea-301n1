@@ -10,7 +10,7 @@ articleView.populateFilters = function() {
       //       text to create the option tag (in a variable named `optionTag`),
       //       that we can append to the #author-filter select element.
       //       YAY, DOM manipulation!
-      var val = $(this).find('address a').text();
+      var val = $(this).('data-author');
       var optionTag = '<option value="' + val + '">' + val + '</option>';
       $('#author-filter').append(optionTag);
 
