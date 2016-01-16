@@ -6,7 +6,6 @@
   <title>Handlebars Template</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js" charset="utf-8"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.4/handlebars.min.js" charset="utf-8"></script>
-
   <script id="hello" type="text/x-handlebars-template">
     Hello {{who}}, my name is {{name}}, and I like {{what}}
   </script>
@@ -21,8 +20,8 @@
     };
     var appTemplate = $('#hello').html()
     var compiledTemplate = Handlebars.compile(appTemplate);
-    //var html = compiledTemplate(data);
-    $('#app').append(compiledTemplate(data));
+    var html = compiledTemplate(data);
+    $('#app').append(html);
   </script>
 
 </body>
