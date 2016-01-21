@@ -87,12 +87,12 @@ articleView.create = function() {
   newArticle.body = $('#article-body').val();
   newArticle.publishedOn = new Date();
 
-  var newArt = new Article(newArticle);
+  newArticle = new Article(newArticle);
 
   console.log(newArticle);
 
-  // TODO: Use our interface to the Handblebars template to put this new article into the DOM:
-  console.log(newArt.toHtml());
+  // DONE: Use our interface to the Handblebars template to put this new article into the DOM:
+  $('#articles').append(newArticle.toHtml());
 
   // TODO: Activate the highlighting of any code blocks:
 
