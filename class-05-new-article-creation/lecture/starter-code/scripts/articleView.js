@@ -75,17 +75,20 @@ articleView.initNewArticlePage = function() {
 
 articleView.create = function() {
   // DONE: Set up a var to hold the new article we are creating.
-  // TODO: Clear out the #articles element, so we can put in the updated preview
+  // DONE Clear out the #articles element, so we can put in the updated preview
+  $('#articles').empty();
 
   var newArticle = {};
 
-  // TODO: Instantiate an article based on what's in the form fields:
+  // DONE: Instantiate an article based on what's in the form fields:
   newArticle.author = $('#article-author').val();
   newArticle.authorUrl = $('#article-author-url').val();
   newArticle.title = $('#article-title').val();
   newArticle.category = $('#article-category').val();
-  newArticle.body = $('#article-body').val();
+  newArticle.body = marked($('#article-body').val());
   newArticle.publishedOn = new Date();
+
+  console.log(newArticle.body);
 
   newArticle = new Article(newArticle);
 
@@ -96,7 +99,11 @@ articleView.create = function() {
 
   // TODO: Activate the highlighting of any code blocks:
 
-  // TODO: Export the new article as JSON, so it's ready to copy/paste into blogArticles.js:
+  // DONE: Export the new article as JSON, so it's ready to copy/paste into blogArticles.js:
+  var stringified = JSON.stringify(newArticle);
+
+  console.log(stringified);
+
 };
 
 
