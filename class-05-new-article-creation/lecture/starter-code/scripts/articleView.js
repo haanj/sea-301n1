@@ -64,13 +64,17 @@ articleView.setTeasers = function() {
 
 articleView.initNewArticlePage = function() {
   // DONE?: Ensure the main .tab-content area is revealed. We might add more tabs later.
-    $('.tab-content').show();
+  $('.tab-content').show();
   // TODO: The new articles we create will be copy/pasted into our source data file.
   // Set up this "export" functionality. We can hide it for now, and show it once we have data to export.
 
 
 
   // TODO: Add an event handler to update the preview and the export field if any inputs change.
+  $('#new-form').change(function(){
+    articleView.create();
+  });
+
 };
 
 articleView.create = function() {
@@ -95,12 +99,17 @@ articleView.create = function() {
   console.log(newArticle);
 
   // DONE: Use our interface to the Handblebars template to put this new article into the DOM:
+  // TODO: figure out why it only displays after clicking on the page
+  $('#articles').css('border', '1px grey');
+  $('#articles').append('<h3>Live Article Preview:</h3>');
   $('#articles').append(newArticle.toHtml());
+
 
   // TODO: Activate the highlighting of any code blocks:
 
   // DONE: Export the new article as JSON, so it's ready to copy/paste into blogArticles.js:
   var stringified = JSON.stringify(newArticle);
+  $('#article-json').show();
 
   console.log(stringified);
 
