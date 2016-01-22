@@ -52,7 +52,7 @@
           <label>
             <input type="text" id="article-title" placeholder="Article title" required>
           </label>
-          <textarea id="article-body" rows="8" cols="40" required></textarea>
+          <textarea id="article-body" placeholder="Blog Body" rows="8" cols="40" required></textarea>
           <label>
             <input type="text" id="article-author" placeholder="Author Name" required>
           </label>
@@ -91,7 +91,11 @@
     <script src="scripts/articleView.js"></script>
     <script>
       // DONE: Initialize page behaviors, and run code:
-      articleView.initNewArticlePage();
+
+      $(document).ready(function(){
+        articleView.initNewArticlePage();
+      });
+
     </script>
   </body>
 </html>
