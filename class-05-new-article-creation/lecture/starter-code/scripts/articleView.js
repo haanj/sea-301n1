@@ -53,7 +53,7 @@ articleView.handleMainNav = function() {
 };
 
 articleView.setTeasers = function() {
-  $('.article-body *:nth-of-type(n+2)').hide(); // Hide elements beyond the first 2 in any article body.
+  //$('.article-body *:nth-of-type(n+2)').hide(); // Hide elements beyond the first 2 in any article body.
 
   $('#articles').on('click', 'a.read-on', function(e) {
     e.preventDefault();
@@ -63,15 +63,18 @@ articleView.setTeasers = function() {
 };
 
 articleView.initNewArticlePage = function() {
+  // Resets form on refresh
+  $('#new-form')[0].reset();
   // DONE?: Ensure the main .tab-content area is revealed. We might add more tabs later.
   $('.tab-content').show();
   // TODO: The new articles we create will be copy/pasted into our source data file.
   // Set up this "export" functionality. We can hide it for now, and show it once we have data to export.
+  $('#export-field').hide();
 
 
 
   // TODO: Add an event handler to update the preview and the export field if any inputs change.
-  $('#new-form').change(function(){
+  $('#new-form').on('keyup change paste', function(){
     articleView.create();
   });
 
@@ -92,15 +95,11 @@ articleView.create = function() {
   newArticle.body = marked($('#article-body').val());
   newArticle.publishedOn = new Date();
 
-  console.log(newArticle.body);
-
   newArticle = new Article(newArticle);
 
-  console.log(newArticle);
 
   // DONE: Use our interface to the Handblebars template to put this new article into the DOM:
   // TODO: figure out why it only displays after clicking on the page
-  $('#articles').css('border', '1px grey');
   $('#articles').append('<h3>Live Article Preview:</h3>');
   $('#articles').append(newArticle.toHtml());
 
@@ -108,9 +107,9 @@ articleView.create = function() {
   // TODO: Activate the highlighting of any code blocks:
 
   // DONE: Export the new article as JSON, so it's ready to copy/paste into blogArticles.js:
-  var stringified = JSON.stringify(newArticle);
-  $('#article-json').show();
-
+  var stringified = JSON.stringify(newArticle) + ',';
+  $('#export-field').show();
+  $('#article-json').val(stringified);
   console.log(stringified);
 
 };
