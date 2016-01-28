@@ -65,26 +65,32 @@ Article.numWordsAll = function() {
   })
 };
 
-// TODO: Chain together a `map` and a `reduce` call to produce an array of unique author names.
+// DONE: Chain together a `map` and a `reduce` call to produce an array of unique author names.
 Article.allAuthors = function() {
   return Article.all.map(function(article) {
-      return article.author
+    return article.author
   }).reduce(function(authors, author) {
-      if ($.inArray(author, authors) == -1){
-          authors.push(author);
-          return authors;
-      } else {
-          console.log("author already exists!");
-      }
-  },[])// Don't forget to read the docs on map and reduce!
+    if ($.inArray(author, authors) == -1){
+      authors.push(author);
+      return authors;
+    } else {
+      return authors;
+    }
+  }, [])// Don't forget to read the docs on map and reduce!
 };
 
 Article.numWordsByAuthor = function() {
-  // TODO: Transform each author string into an object with 2 properties: One for
+  // DONE: Transform each author string into an object with 2 properties: One for
   // the author's name, and one for the total number of words across all articles written by the specified author.
   return Article.allAuthors().map(function(author) {
     return {
       // someKey: someValOrFunctionCall().map(...).reduce(...), ...
-    }
-  })
+      name: author,
+      wordcount: Article.all.filter(function(ele){
+        return (ele.author == author);
+      }).reduce(function(total, article){
+        return total += article.body.split(/\s+/g).length;
+      }, 0)
+    };
+  });
 };
