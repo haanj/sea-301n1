@@ -45,27 +45,38 @@ Article.fetchAll = function() {
     Article.loadAll(JSON.parse(localStorage.rawData));
     articleView.initIndexPage();
   } else {
-    $.getJSON('/data/hackerIpsum.json', function(rawData) {
+    $.getJSON('data/hackerIpsum.json', function(rawData) {
       Article.loadAll(rawData);
       localStorage.rawData = JSON.stringify(rawData); // Cache the json, so we don't need to request it next time.
       articleView.initIndexPage();
+
     });
-  }
+  };
 };
 
-// TODO: Chain together a `map` and a `reduce` call to get a rough count of all words in all articles.
+// DONE: Chain together a `map` and a `reduce` call to get a rough count of all words in all articles.
 Article.numWordsAll = function() {
   return Article.all.map(function(article) {
-    return // Get the total number of words in this article
+
+    return article.body.split(/\s+/g).length // Get the total number of words in this article
   })
   .reduce(function(a, b) {
-    return // Sum up all the values in the collection
+    return a + b// Sum up all the values in the collection
   })
 };
 
 // TODO: Chain together a `map` and a `reduce` call to produce an array of unique author names.
 Article.allAuthors = function() {
-  return // Don't forget to read the docs on map and reduce!
+  return Article.all.map(function(article) {
+      return article.author
+  }).reduce(function(authors, author) {
+      if ($.inArray(author, authors) == -1){
+          authors.push(author);
+          return authors;
+      } else {
+          console.log("author already exists!");
+      }
+  },[])// Don't forget to read the docs on map and reduce!
 };
 
 Article.numWordsByAuthor = function() {
