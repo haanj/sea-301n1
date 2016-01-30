@@ -88,7 +88,7 @@
       return {
         // someKey: someValOrFunctionCall().map(...).reduce(...), ...
         name: author,
-        wordcount: Article.all.filter(function(ele){
+        numWords: Article.all.filter(function(ele){
           return (ele.author == author);
         }).reduce(function(total, article){
           return total += article.body.split(/\s+/g).length;
