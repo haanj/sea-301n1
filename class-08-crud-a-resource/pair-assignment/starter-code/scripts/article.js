@@ -90,7 +90,7 @@
         // Now instanitate those rows with the .loadAll function, and pass control to the view.
 
       } else {
-        $.getJSON('/data/hackerIpsum.json', function(rawData) {
+        $.getJSON('data/hackerIpsum.json', function(rawData) {
           // Cache the json, so we don't need to request it next time:
           rawData.forEach(function(item) {
             var article = new Article(item); // Instantiate an article based on item from JSON
