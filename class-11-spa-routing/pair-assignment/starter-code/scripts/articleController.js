@@ -9,8 +9,11 @@
   // code that used to be in index.html.
   // Also be sure to hide all the main section elements, and reveal the #articles section:
   articlesController.index = function() {
+    console.log("article controller");
     Article.fetchAll(articleView.initIndexPage);
-    
+    $('#articles').show();
+    $('#about').hide();
+
   };
 
   module.articlesController = articlesController;
