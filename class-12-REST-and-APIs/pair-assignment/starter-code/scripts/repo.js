@@ -20,9 +20,9 @@
         webDB.execute( // create table for files
           'CREATE TABLE IF NOT EXISTS repo_files(' +
             'id INTEGER PRIMARY KEY, ' +
-            'repo_id INTEGER, ' +
-            'file_name VARCHAR(255), ' +
-            'download_url VARCHAR(255));',
+            'repo_name VARCHAR(255) NOT NULL, ' +
+            'file_name VARCHAR(255) NOT NULL, ' +
+            'download_url VARCHAR(255) NOT NULL);',
           function(result) {
             console.log('Successfully created repo_files table');
             if (callback) callback();
@@ -59,9 +59,14 @@
 
       } else {
         $.get('https://api.github.com/users/haanj/repos', function(rawData){
+
           // Cache the json, so we don't need to request it next time:
           rawData.forEach(function(item) {
             console.log(item);
+
+            // Remove {+path} from contents_url
+            item.contents_url = item.contents_url.replace('{+path}', '');
+
             webDB.execute(
               [
                 {
@@ -70,12 +75,41 @@
                 }
               ]
             );
-          });
-          webDB.execute('SELECT * FROM repos ORDER BY update_date DESC', function(rows) {
-            console.log(rows);
+
+            repos.requestFiles(item.name, item.contents_url);
           });
         });
       }
+    });
+  };
+
+  repos.requestFiles = function(repoName, repoContents) {
+
+    $.get(repoContents, function(rawData) {
+      console.log(rawData);
+      rawData.forEach(function(item) {
+
+        if (item.type !== 'dir') {
+          console.log('Adding file: ' + item.name);
+          webDB.execute(
+            [
+              {
+                'sql': 'INSERT INTO repo_files (file_name, repo_name, download_url) VALUES (?, ?, ?);',
+                'data': [item.name, repoName, item.download_url]
+              }
+            ]
+          );
+        } else {
+          console.log('Adding folder: ' + item.name);
+          repos.requestFiles(repoName, item._links.self);
+        };
+
+
+
+
+
+
+      });
     });
   };
 
