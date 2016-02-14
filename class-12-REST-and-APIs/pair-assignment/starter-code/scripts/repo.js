@@ -32,6 +32,18 @@
     );
   };
 
+  repos.dropTables = function(callback) {
+    webDB.execute(
+      'DROP TABLE IF EXISTS repos;'
+    );
+    webDB.execute(
+      'DROP TABLE IF EXISTS repo_files;'
+    );
+
+    if (callback) callback();
+
+  };
+
   repos.truncateTable = function() {
     webDB.execute(
       'DELETE FROM repos;'
@@ -58,11 +70,17 @@
         */
 
       } else {
+
+
+
+
+
+
+
         $.get('https://api.github.com/users/haanj/repos', function(rawData){
 
           // Cache the json, so we don't need to request it next time:
           rawData.forEach(function(item) {
-            console.log(item);
 
             // Remove {+path} from contents_url
             item.contents_url = item.contents_url.replace('{+path}', '');
@@ -83,37 +101,50 @@
     });
   };
 
-  repos.requestFiles = function(repoName, repoContents) {
+/*
+/////// $.ajax guide
+repos.requestRepos = function(callback) {
+  $.ajax({
+    url: 'https://api.github.com/users/brookr/repos' +
+          '?per_page=100' +
+          '&sort=updated',
+    type: 'GET',
+    headers: { 'Authorization': 'token ' + githubToken },
+    success: function(data, message, xhr) {
+      repos.all = data;
+    }
+  }).done(callback);
+};
 
-    $.get(repoContents, function(rawData) {
-      console.log(rawData);
-      rawData.forEach(function(item) {
+*/
+  repos.requestFiles = function(repoName, repoContentsUrl) {
+    $.ajax({
+      url: repoContentsUrl,
+      type: 'GET',
+      headers: { 'Authorization': 'token ' + githubToken},
+      success: function(rawData, message, xhr){
+        console.log(rawData);
+        rawData.forEach(function(item) {
 
-        if (item.type !== 'dir') {
-          console.log('Adding file: ' + item.name);
-          webDB.execute(
-            [
-              {
-                'sql': 'INSERT INTO repo_files (file_name, repo_name, download_url) VALUES (?, ?, ?);',
-                'data': [item.name, repoName, item.download_url]
-              }
-            ]
-          );
-        } else {
-          console.log('Adding folder: ' + item.name);
-          repos.requestFiles(repoName, item._links.self);
-        };
+          if (item.type !== 'dir') {
+            console.log('Adding file: ' + item.name);
+            webDB.execute(
+              [
+                {
+                  'sql': 'INSERT INTO repo_files (file_name, repo_name, download_url) VALUES (?, ?, ?);',
+                  'data': [item.name, repoName, item.download_url]
+                }
+              ]
+            );
+          } else {
+            console.log('Adding folder: ' + item.name);
+            repos.requestFiles(repoName, item._links.self);
+          };
+        });
 
-
-
-
-
-
-      });
+      }
     });
   };
-
-
 
 
 
