@@ -20,9 +20,9 @@
         webDB.execute( // create table for files
           'CREATE TABLE IF NOT EXISTS repo_files(' +
             'id INTEGER PRIMARY KEY, ' +
-            'repo_name VARCHAR(255) NOT NULL, ' +
-            'file_name VARCHAR(255) NOT NULL, ' +
-            'download_url VARCHAR(255) NOT NULL);',
+            'repo_name VARCHAR(255), ' +
+            'file_name VARCHAR(255), ' +
+            'download_url VARCHAR(255));',
           function(result) {
             console.log('Successfully created repo_files table');
             if (callback) callback();
@@ -71,52 +71,33 @@
 
       } else {
 
+        $.ajax({
+          url: 'https://api.github.com/users/haanj/repos',
+          type: 'GET',
+          headers: { 'Authorization': 'token ' + githubToken },
+          success: function(rawData, message, xhr) {
+            rawData.forEach(function(item) {
 
+              // Remove {+path} from contents_url
+              item.contents_url = item.contents_url.replace('{+path}', '');
 
+              webDB.execute(
+                [
+                  {
+                    'sql': 'INSERT INTO repos (name, url, update_date, contents_url, ssh_url) VALUES (?, ?, ?, ?, ?);',
+                    'data': [item.name, item.url, item.updated_at, item.contents_url, item.ssh_url]
+                  }
+                ]
+              );
 
-
-
-
-        $.get('https://api.github.com/users/haanj/repos', function(rawData){
-
-          // Cache the json, so we don't need to request it next time:
-          rawData.forEach(function(item) {
-
-            // Remove {+path} from contents_url
-            item.contents_url = item.contents_url.replace('{+path}', '');
-
-            webDB.execute(
-              [
-                {
-                  'sql': 'INSERT INTO repos (name, url, update_date, contents_url, ssh_url) VALUES (?, ?, ?, ?, ?);',
-                  'data': [item.name, item.url, item.updated_at, item.contents_url, item.ssh_url]
-                }
-              ]
-            );
-
-            repos.requestFiles(item.name, item.contents_url);
-          });
+              repos.requestFiles(item.name, item.contents_url);
+            });
+          }
         });
       }
     });
   };
 
-/*
-/////// $.ajax guide
-repos.requestRepos = function(callback) {
-  $.ajax({
-    url: 'https://api.github.com/users/brookr/repos' +
-          '?per_page=100' +
-          '&sort=updated',
-    type: 'GET',
-    headers: { 'Authorization': 'token ' + githubToken },
-    success: function(data, message, xhr) {
-      repos.all = data;
-    }
-  }).done(callback);
-};
-
-*/
   repos.requestFiles = function(repoName, repoContentsUrl) {
     $.ajax({
       url: repoContentsUrl,
