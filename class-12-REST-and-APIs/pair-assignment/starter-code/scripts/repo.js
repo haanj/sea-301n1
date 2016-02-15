@@ -54,9 +54,7 @@
   };
 
   repos.loadAll = function(rows) {
-    repos.all = rows.forEach(function(ele) {
-      console.log(ele);
-    });
+    repos.all = rows;
   };
 
 
@@ -64,13 +62,10 @@
     // TODO: How would you like to fetch your repos? Don't forget to call the callback.
     webDB.execute('SELECT * FROM repos ORDER BY update_date DESC', function(rows) {
       if (rows.length) {
-        /*
-        Article.loadAll(rows);
+        repos.loadAll(rows);
         callback();
-        */
 
       } else {
-
         $.ajax({
           url: 'https://api.github.com/users/haanj/repos',
           type: 'GET',
@@ -91,12 +86,17 @@
               );
 
               repos.requestFiles(item.name, item.contents_url);
+              callback();
             });
           }
-        });
-      }
+        }); // ajax
+
+      } // else
     });
   };
+
+
+
 
   repos.requestFiles = function(repoName, repoContentsUrl) {
     $.ajax({
