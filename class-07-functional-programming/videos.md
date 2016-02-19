@@ -1,6 +1,5 @@
 # Class videos
 ## 2015-12-08
-- [Part 1 of 4](https://youtu.be/jfttSbJkoGY)
-- [Part 2 of 4](https://youtu.be/eqZejjulhAk)
-- [Part 3 of 4](https://youtu.be/TdeP08BZt4Q)
-- [Part 4 of 4](https://youtu.be/eqZejjulhAk)
+- [Part 1 of 2](https://www.youtube.com/watch?v=Ow-pP85Dxog&list=PLVngfM2hsbi_0F9bc2XQ1Fo2GQnVMebG8&index=16)
+- [Part 2 of 2](https://www.youtube.com/watch?v=3pVixwnGAhk&list=PLVngfM2hsbi_0F9bc2XQ1Fo2GQnVMebG8&index=17)
+
